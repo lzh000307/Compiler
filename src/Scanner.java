@@ -59,13 +59,14 @@ public class Scanner {
                     word.set(Character.toString(ch));
                     break;
                 case '/':
-                    next();  //判定下一位
+                    ch=next();  //判定下一位
                     if(ch == '/'){
                         ch = str.charAt(endLoc++);
                         while(ch != 10){
                             ch = str.charAt(endLoc++);
                         }
                         line++;
+                        break;
                     }else if(ch == '*'){
                         ch = next();
                         while(ch != '*'){
@@ -80,6 +81,7 @@ public class Scanner {
                     }
                     //TODO Error
                     ch = back();
+                    word.set("/");
                     break;
                 case '<':
                     ch = next();
@@ -127,7 +129,8 @@ public class Scanner {
             }
         }
         //startLoc = endLoc++;
-        words.add(word);
+        if(word.getTypeNumber()!=0)
+            words.add(word);
         return;
     }
 

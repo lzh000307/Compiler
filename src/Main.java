@@ -15,8 +15,15 @@ public class Main {
         while(Scanner.endLoc < str.length()-1){
             Scanner.scanner();
         }
+        /*
+        System.out.println("***************************");
+        for(Word word : Scanner.words) {
 
+            System.out.println(word);
+        }
 
+         */
+        Parser.parse();
     }
 
 }

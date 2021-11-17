@@ -11,6 +11,7 @@ public class Parser {
     public static int current=0;
     public static void parse() {
         int nChain[] = new int[1]/*= {1}*/;
+        words.get(current++).equals("int");
         words.get(current++).equals("main");
         words.get(current++).equals("(");
         words.get(current++).equals(")");
@@ -23,7 +24,8 @@ public class Parser {
      */
     public static void printQuaternion() {
         int nLoop = 0;
-        for (nLoop = 1; nLoop < nNXQ; nLoop++) {
+        //for (nLoop = 1; nLoop < nNXQ; nLoop++) {
+        for (nLoop = 0; nLoop < pQuad.size(); nLoop++) {
             System.out.println(nLoop + ":(" + pQuad.get(nLoop).op + "," + pQuad.get(nLoop).argv1 + "," + pQuad.get(nLoop).argv2 + "," + pQuad.get(nLoop).result + ")");
         }
     }
@@ -74,15 +76,16 @@ public class Parser {
         int nChainTemp[] = new int[1]/*{1}*/;
         int nWQUAD;
         switch (words.get(current).getTypeNumber()) {
-            case 50:
+            case 10:
                 strTemp = words.get(current).getWord();
                 words.get(++current).equals("=");
+                current++;
                 eplace = expression();
                 words.get(current++).equals(";");
                 gen("=", eplace, "", strTemp);
                 nChain[0] = 0;
                 break;
-            case 8://symbol.get("if"):
+            case 4://symbol.get("if"):
                 words.get(current++).equals("if");
                 words.get(current++).equals("(");
                 condition(ntc, nfc);//
@@ -91,7 +94,7 @@ public class Parser {
                 statementBlock(nChainTemp);
                 nChain[0] = merg(nChainTemp[0], nfc[0]);
                 break;
-            case 6://symbol.get("while"):
+            case 7://symbol.get("while"):
                 words.get(current++).equals("while");
                 nWQUAD = nNXQ;
                 words.get(current++).equals("(");
@@ -163,7 +166,7 @@ public class Parser {
         eplace1 = term();
         eplace = eplace1;       //eplace1;
         while (words.get(current).equals("+") || words.get(current).equals("-")) {
-            opp = words.get(current).getWord();
+            opp = words.get(current).getWord();             //+ or -
             current++;
             eplace2 = term();
             eplace = newtemp();

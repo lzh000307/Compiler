@@ -1,7 +1,5 @@
-begin 
 int main(){
-    x=9;  //this is the first code annotation (main)
-    if x>0    /*secend annotation main */
-        then x=2*x+1.3; 
+    a=1+2*3;
+    b=(9-7)*6;
+    x=a+b/c;
 }
-end

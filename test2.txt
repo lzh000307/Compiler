@@ -1,0 +1,9 @@
+int main(){
+    a=1+2/3;
+    x=a+b/c;
+
+//    x=9;  //this is the first code annotation (main)
+//    if(x>0)    /*secend annotation main */
+ //       x=2*x+1.3;
+
+}

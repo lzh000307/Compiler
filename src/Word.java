@@ -28,13 +28,13 @@ public class Word {
     public void set(String word){
         this.word = word;
         this.typeNumber = Utils.wordsList.get(word);
-        print();
+        //print();
     }
     public void set(int typeNumber, String word){
         this.typeNumber = typeNumber;
         this.word = word;
         this.line = 0;
-        print();
+        //print();
     }
     private void print(){
         System.out.println("(" + typeNumber + "," + word + ')');
@@ -63,7 +63,12 @@ public class Word {
 
     public boolean equals(String str) {
         //TODO ERROR NOTIFICATION
-        return this.typeNumber == Utils.wordsList.get(str);
+        if(this.typeNumber == Utils.wordsList.get(str)){
+            //System.out.println("equal true");
+            return true;
+        }
+        //System.out.println("not equal");
+        return false;
     }
 
     @Override
