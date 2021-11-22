@@ -13,17 +13,18 @@ public class Parser {
     public static int nSuffix = 0, nNXQ = 0, ntc = 1, nfc = 1;
     public static int nChain = 1;
     public static List<Word> words = Scanner.words;
-    public static int current=0;
-
+    //public static int p.get()=0;
+    public static Pointer p;
     /**
      * 匹配开头
      */
     public static void parse() {
         //int nChain = 1 /* new int[1]= {1} */;
-        words.get(current++).equals("int");
-        words.get(current++).equals("main");
-        words.get(current++).equals("(");
-        words.get(current++).equals(")");
+        p = new Pointer(0,words.size());
+        words.get(p.getpp()).check("int");
+        words.get(p.getpp()).check("main");
+        words.get(p.getpp()).check("(");
+        words.get(p.getpp()).check(")");
         statementBlock();
         printQuaternion();
     }
@@ -43,9 +44,9 @@ public class Parser {
      * 匹配{}
      */
     public static void statementBlock() {
-        words.get(current++).equals("{");
+        words.get(p.getpp()).check("{");
         statementSequence();
-        words.get(current++).equals("}");
+        words.get(p.getpp()).check("}");
     }
 
     /**
@@ -54,7 +55,7 @@ public class Parser {
      */
     public static void statementSequence() {
         statement();
-        while (words.get(current).isVariable() || words.get(current).equals("if") || words.get(current).equals("while")) {
+        while (words.get(p.get()).isVariable() || words.get(p.get()).equals("if") || words.get(p.get()).equals("while")) {
             bp(nChain, nNXQ);
             statement();
         }
@@ -98,47 +99,47 @@ public class Parser {
         String strTemp, eplace;
         int nChainTemp = 1;   /*new int[1]/*{1}*/
         int nWQUAD;
-        switch (words.get(current).getTypeNumber()) {
+        switch (words.get(p.get()).getTypeNumber()) {
             case VARIABLE:
-                strTemp = words.get(current).getWord();
+                strTemp = words.get(p.get()).getWord();
                 //变量后面跟 =
-                words.get(++current).equals("=");
-                current++;
+                p.getpp();
+                words.get(p.getpp()).check("=");
                 //判断后面跟不跟 +-*/
                 eplace = expression();
                 //是否有结束分号
                 //TODO 出错提示
-                words.get(current++).equals(";");
+                words.get(p.getpp()).check(";");
 
                 gen("=", eplace, "", strTemp);
                 nChain = 0;
                 break;
             case IF:
                 //if起始判断
-                words.get(current++).equals("if");
-                words.get(current++).equals("(");
+                words.get(p.getpp()).check("if");
+                words.get(p.getpp()).check("(");
                 //
                 condition();//
                 bp(ntc, nNXQ);
-                words.get(current++).equals(")");
+                words.get(p.getpp()).check(")");
                 nChain = nChainTemp;
                 statementBlock();
                 nChain = merg(nChainTemp, nfc);
                 break;
             case WHILE:
-                words.get(current++).equals("while");
+                words.get(p.getpp()).check("while");
                 nWQUAD = nNXQ;
-                words.get(current++).equals("(");
+                words.get(p.getpp()).check("(");
                 condition();
                 int nfcInt = nfc;//这里加这句，是因为while里有if时，while里的nfc会被覆盖，那么下方nChain[0] = nfcInt;就得到错误的nChain[0]
                 bp(ntc, nNXQ);
-                words.get(current++).equals(")");
+                words.get(p.getpp()).check(")");
                 nChain = nChainTemp;
                 statementBlock();
                 bp(nChainTemp, nWQUAD);
                 //由于第一行算1，因此要+1
                 strTemp = nWQUAD + 1 + "";
-                gen("j", "", "", strTemp);
+                gen("jmp", "", "", strTemp);
                 nChain = nfcInt;
                 break;
         }
@@ -161,18 +162,18 @@ public class Parser {
         //读出左边表达式，得到变量
         val1 = expression();
         // 匹配判断符
-        if (words.get(current).getTypeNumber() >= CONDITION_START && words.get(current).getTypeNumber() <= CONDITION_END) {
+        if (words.get(p.get()).getTypeNumber() >= CONDITION_START && words.get(p.get()).getTypeNumber() <= CONDITION_END) {
             //<>之分
             /*
-            if (words.get(current).equals("<") || words.get(current).equals(">")) {
-                opp = words.get(current).getWord();
+            if (words.get(p.get()).equals("<") || words.get(p.get()).equals(">")) {
+                opp = words.get(p.get()).getWord();
             } else {
-                opp = words.get(current).getWord();
+                opp = words.get(p.get()).getWord();
             }
 
             */
             //读出判断符号
-            op = words.get(current++).getWord();
+            op = words.get(p.getpp()).getWord();
             //读出右边表达式，得到变量
             val2 = expression();
             //TODO delete?
@@ -181,13 +182,13 @@ public class Parser {
             nfc = nNXQ + 1;
 
             // TODO j
-            strTemp = "j" + op;
+            strTemp = "jmpIF" + op;
             // TODO why
             gen(strTemp, val1, val2, "0");
-            gen("j", "", "", "0");
+            gen("jmp", "", "", "0");
         } else {
             //TODO ERROR OUTPUT
-            //error("关系运算符");
+            words.get(p.get()).equals("<");
         }
     }
 
@@ -213,9 +214,9 @@ public class Parser {
         String opp, eplace, eplace1, eplace2;
         eplace1 = term();
         eplace = eplace1;       //eplace1;
-        while (words.get(current).equals("+") || words.get(current).equals("-")) {
-            opp = words.get(current).getWord();             //+ or -
-            current++;
+        while (words.get(p.get()).equals("+") || words.get(p.get()).equals("-")) {
+            opp = words.get(p.get()).getWord();             //+ or -
+            p.getpp();
             eplace2 = term();
             eplace = newtemp();
             gen(opp, eplace1, eplace2, eplace);
@@ -232,9 +233,9 @@ public class Parser {
     public static String term() {
         String opp, eplace, eplace1, eplace2;
         eplace = eplace1 = factor();
-        while (words.get(current).equals("*") || words.get(current).equals("/")) {
-            opp = words.get(current).getWord();
-            current++;
+        while (words.get(p.get()).equals("*") || words.get(p.get()).equals("/")) {
+            opp = words.get(p.get()).getWord();
+            p.getpp();
             eplace2 = factor();
             eplace = newtemp();
             gen(opp, eplace1, eplace2, eplace);
@@ -249,16 +250,13 @@ public class Parser {
      */
     public static String factor() {
         String eplace = "";
-        if (words.get(current).isVariable() || words.get(current).isFigure()) //为标识符或整常数时，读下一个单词符号
+        if (words.get(p.get()).isVariable() || words.get(p.get()).isFigure()) //为标识符或整常数时，读下一个单词符号
         {
-            eplace = words.get(current).getWord();
-            current++;
-        } else if (words.get(current++).equals("(")) {
-            //match(symbol.get("("), "(");
+            eplace = words.get(p.get()).getWord();
+            p.getpp();
+        } else if (words.get(p.getpp()).check("(")) {
             eplace = expression();
-            if (!words.get(current++).equals(")")) {
-                //match(symbol.get(")"), ")");
-                //TODO ERROR NOTIFICATION
+            if (!words.get(p.getpp()).check(")")) {
             }
         }
         return eplace;

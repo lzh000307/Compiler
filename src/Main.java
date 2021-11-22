@@ -12,6 +12,8 @@ public class Main {
         //str = sc.nextLine();
         String fileSrc = System.getProperty("user.dir") + File.separator + "test.txt";
         str = Utils.input(fileSrc)/*+"\0"*/;
+        Scanner.str = str;
+        Scanner.length = str.length() - 1;
         while(Scanner.endLoc < str.length()-1){
             Scanner.scanner();
         }

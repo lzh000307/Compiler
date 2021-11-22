@@ -3,7 +3,10 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 public class Utils {
+    public static final int GRAMMER_ERROR = 1;
     public static HashMap<String, Integer> wordsList = new HashMap<>();
+
+
 
     public static void initialize() {
         wordsList.put("main", 1);
@@ -18,11 +21,13 @@ public class Utils {
         wordsList.put("begin", 8);
         //wordsList.put("else", 9);     //optional
         //wordsList.put("do", 10);      //optional
+        //运算符 21-25
         wordsList.put("=", 21);
         wordsList.put("+", 22);
         wordsList.put("-", 23);
         wordsList.put("*", 24);
         wordsList.put("/", 25);
+        //
         wordsList.put("(", 26);
         wordsList.put(")", 27);
         wordsList.put("[", 28);
@@ -32,6 +37,7 @@ public class Utils {
         wordsList.put(",", 32);
         wordsList.put(":", 33);
         wordsList.put(";", 34);
+        //关系运算符 35-40
         wordsList.put(">", 35);
         wordsList.put("<", 36);
         wordsList.put(">=", 37);
@@ -98,4 +104,18 @@ public class Utils {
         }
         return new String(bf);
     }
+
+    /**
+     * 出错提示
+     */
+    /*
+    public static String errorNotification(int errorType){
+        switch (errorType){
+            case GRAMMER_ERROR:
+                return "Grammer Error 语法错误: ";
+                break;
+        }
+    }
+
+     */
 }

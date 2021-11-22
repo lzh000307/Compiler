@@ -2,9 +2,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scanner {
-    public static Word word = new Word();
+    private static Word word = new Word();
     public static List<Word> words = new ArrayList<Word>();
-    public static int line = 1;
+    private static int line = 1;
+    private static int lineStartPosition = 0;
     public static int startLoc = 0;
     public static int endLoc = 0;
     public static String str;
@@ -12,8 +13,7 @@ public class Scanner {
     public static char ch;
     public static void scanner(){
         word = new Word();
-        str = Main.getStr();
-        length = str.length() - 1;
+        //str = Main.getStr();
         //System.out.println(str + startLoc);
         //startLoc = Utils.getInitialCharLoc();       //get recent word's location
         ch = next();            //get the first character
@@ -66,6 +66,8 @@ public class Scanner {
                             ch = str.charAt(endLoc++);
                         }
                         line++;
+                        //TODO WARNING Might have bug!
+                        lineStartPosition = endLoc + 1;
                         break;
                     }else if(ch == '*'){
                         ch = next();
@@ -121,7 +123,7 @@ public class Scanner {
                     break;
                 case '\0':
                     word.set("\\0");
-                    System.out.println(str.length() + " + " + endLoc);
+                    //System.out.println(str.length() + " + " + endLoc);
                     return;
                 default:
                     Parser.errorNotification(Character.toString(ch), line);
@@ -129,8 +131,11 @@ public class Scanner {
             }
         }
         //startLoc = endLoc++;
-        if(word.getTypeNumber()!=0)
+        if(word.getTypeNumber()!=0) {
+            word.setLine(line, lineStartPosition);
+            word.setPosition(startLoc);
             words.add(word);
+        }
         return;
     }
 
@@ -139,12 +144,14 @@ public class Scanner {
      * @return
      */
     public static char next(){
-        while((str.charAt(endLoc) == ' ' || str.charAt(endLoc)=='\n')&& length < endLoc) {
-            while (str.charAt(endLoc) == '\n' && length < endLoc) {
+        while((str.charAt(endLoc) == ' ' || str.charAt(endLoc)=='\n')&& length > endLoc) {
+            if(str.charAt(endLoc) == '\n') {
                 endLoc++;
+                lineStartPosition=endLoc;
                 line++;
             }
-            endLoc++;
+            else
+                endLoc++;
         }
         if(length <= endLoc)
             return '\0';
@@ -160,4 +167,7 @@ public class Scanner {
         return str.charAt(endLoc++);
     }
 
+    public static String getStr() {
+        return str;
+    }
 }

@@ -13,3 +13,10 @@ int main(){
     b=(9-7)*6;
     x=a+b/c;
 }
+
+int main(){
+    i=1+2*3;
+    while(i<2){
+            i=i-1;
+    }
+}
