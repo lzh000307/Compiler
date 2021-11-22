@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
-public class Parser {
+
+public class Parser_bak {
     public static final int VARIABLE    = 10;
     public static final int FIGURE      = 20;
     public static final int IF          = 4;
@@ -24,7 +25,7 @@ public class Parser {
         words.get(current++).equals("main");
         words.get(current++).equals("(");
         words.get(current++).equals(")");
-        statementBlock();
+        statementBlock(nChain);
         printQuaternion();
     }
 
@@ -41,22 +42,24 @@ public class Parser {
 
     /**
      * 匹配{}
+     * @param nChain
      */
-    public static void statementBlock() {
+    public static void statementBlock(int nChain) {
         words.get(current++).equals("{");
-        statementSequence();
+        statementSequence(nChain);
         words.get(current++).equals("}");
     }
 
     /**
      * 匹配 if & while
      * TODO
+     * @param nChain
      */
-    public static void statementSequence() {
-        statement();
+    public static void statementSequence(int nChain) {
+        statement(nChain);
         while (words.get(current).isVariable() || words.get(current).equals("if") || words.get(current).equals("while")) {
             bp(nChain, nNXQ);
-            statement();
+            statement(nChain);
         }
         bp(nChain, nNXQ);
     }
@@ -75,8 +78,8 @@ public class Parser {
                 w = 0;
             }
             //w = Integer.parseInt(pQuad.get(q).result);
-            //语句行数从1开始，因此要+1
-            pQuad.get(q).setResult(t+1+"");
+            //TODO
+            pQuad.get(q).setResult(t+"");
             q = w;
         }
     }
@@ -93,10 +96,11 @@ public class Parser {
 
     /**
      * TODO
+     * @param nChain
      */
-    public static void statement() {
+    public static void statement(int nChain) {
         String strTemp, eplace;
-        int nChainTemp = 1;   /*new int[1]/*{1}*/
+        int nChainTemp = 1/*new int[1]/*{1}*/;
         int nWQUAD;
         switch (words.get(current).getTypeNumber()) {
             case VARIABLE:
@@ -118,26 +122,23 @@ public class Parser {
                 words.get(current++).equals("if");
                 words.get(current++).equals("(");
                 //
-                condition();//
+                condition(ntc, nfc);//
                 bp(ntc, nNXQ);
                 words.get(current++).equals(")");
-                nChain = nChainTemp;
-                statementBlock();
+                statementBlock(nChainTemp);
                 nChain = merg(nChainTemp, nfc);
                 break;
             case WHILE:
                 words.get(current++).equals("while");
                 nWQUAD = nNXQ;
                 words.get(current++).equals("(");
-                condition();
+                condition(ntc, nfc);
                 int nfcInt = nfc;//这里加这句，是因为while里有if时，while里的nfc会被覆盖，那么下方nChain[0] = nfcInt;就得到错误的nChain[0]
                 bp(ntc, nNXQ);
                 words.get(current++).equals(")");
-                nChain = nChainTemp;
-                statementBlock();
+                statementBlock(nChainTemp);
                 bp(nChainTemp, nWQUAD);
-                //由于第一行算1，因此要+1
-                strTemp = nWQUAD + 1 + "";
+                strTemp = nWQUAD + "";
                 gen("j", "", "", strTemp);
                 nChain = nfcInt;
                 break;
@@ -154,8 +155,10 @@ public class Parser {
 
     /**
      * 判断关系运算符
+     * @param etc
+     * @param efc
      */
-    private static void condition() {
+    private static void condition(int etc, int efc) {
         String op, val1, val2;
         String strTemp;
         //读出左边表达式，得到变量
@@ -176,10 +179,10 @@ public class Parser {
             //读出右边表达式，得到变量
             val2 = expression();
             //TODO delete?
-
-            ntc = nNXQ;
-            nfc = nNXQ + 1;
-
+            /*
+            etc[0] = nNXQ;
+            efc[0] = nNXQ + 1;
+             */
             // TODO j
             strTemp = "j" + op;
             // TODO why
@@ -199,7 +202,8 @@ public class Parser {
             nResult = p = p2;
             while (!isNumeric(pQuad.get(p).getResult()) && Integer.parseInt(pQuad.get(p).getResult()) != 0) {
                 p = Integer.parseInt(pQuad.get(p).getResult());
-                pQuad.get(p).setResult(p1 + "");
+                //TODO
+               // pQuad.get(p).setResult(p1 + "");
             }
         }
         return nResult;
