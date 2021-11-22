@@ -66,7 +66,6 @@ public class Scanner {
                             ch = str.charAt(endLoc++);
                         }
                         line++;
-                        //TODO WARNING Might have bug!
                         lineStartPosition = endLoc + 1;
                         break;
                     }else if(ch == '*'){
@@ -126,6 +125,7 @@ public class Scanner {
                     //System.out.println(str.length() + " + " + endLoc);
                     return;
                 default:
+                    //TODO ERROR
                     Parser.errorNotification(Character.toString(ch), line);
 
             }
