@@ -3,22 +3,15 @@ import java.io.FileReader;
 import java.util.HashMap;
 
 public class Utils {
-    public static final int GRAMMER_ERROR = 1;
     public static HashMap<String, Integer> wordsList = new HashMap<>();
-
-
-
     public static void initialize() {
         wordsList.put("main", 1);
         wordsList.put("int", 2);
         wordsList.put("char", 3);
         wordsList.put("if", 4);
         wordsList.put("else", 5);
-        wordsList.put("for", 6);
+        //wordsList.put("for", 6);
         wordsList.put("while", 7);
-        //wordsList.put("if", 8);       //optional
-        //TODO DELETE
-        wordsList.put("begin", 8);
         //wordsList.put("else", 9);     //optional
         //wordsList.put("do", 10);      //optional
         //运算符 21-25
@@ -47,8 +40,8 @@ public class Utils {
         //还有注释
         wordsList.put("\\0", 1000);
         wordsList.put("ERROR", -1);
+        wordsList.put("NOTIFICATION", -2);
         // 单词是10, 数字是20
-        //结束符//wordsList.put("\0",1000);
     }
 
     /**
@@ -85,9 +78,11 @@ public class Utils {
 
     }
 
-    // 如果从控制台读入的话，可以用while (sc.hasNext())来实现换行后继续读入
-    // 从文件读入，不用一遍遍复制粘贴c语言到控制台
-    // 换行符是"\n",ascii码是10，结束符是"\0"，ascii码是0
+    /**
+     *
+     * @param fileSrc
+     * @return
+     */
     public static String input(String fileSrc) {
         StringBuffer bf = new StringBuffer();
 
@@ -96,9 +91,9 @@ public class Utils {
             String temp;
             while ((temp = br.readLine()) != null) {
                 bf.append(temp);
-                bf.append("\n");
+                bf.append("\n"); //ASCII=10
             }
-            bf.append("\0");
+            bf.append("\0");    //ASCII=0
         } catch (Exception e) {
             e.printStackTrace();
         }

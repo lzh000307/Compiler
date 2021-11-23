@@ -6,8 +6,11 @@ public class Word {
     private int line;               //To storage the line that word in
     private int position;           //记录该单词位置
     private int lineStartPosition;  //该行开始的位置
+    private boolean ifThrowOut = false;
 
-    public Word(){}
+    public Word(){
+        this.typeNumber = -1;
+    }
 
     public Word(int typeNumber, String word, int line){
         this.typeNumber = typeNumber;
@@ -81,6 +84,7 @@ public class Word {
         switch(Utils.wordsList.get(errorstr)){
             case 35,36,37,38,39,40:
                 System.out.println("\"" + errorstr + "\"" + "应为关系运算符。");
+                Parser.p.minus();
                 break;
                 /*
             case 27,29,31,34:
@@ -88,11 +92,14 @@ public class Word {
                 break;
 
                  */
+            case -1, -2:
+                System.out.println("\"" + word + "\"" + "既不是关键字也不是变量、数字。");
+                break;
             default:
                 //System.out.println("\"" + word + "\"应为\"" + errorstr +"\"");
                 System.out.println("\"" + word + "\"前面缺少\"" + errorstr +"\"");
+                Parser.p.minus();
         }
-        Parser.p.minus();
     }
 
     private void print(){
@@ -135,6 +142,7 @@ public class Word {
     }
 
     /**
+     * 出错报告
      * 判断是否相等，如果不相等，则打印出错误
      * @param str
      * @return
@@ -144,7 +152,14 @@ public class Word {
             //System.out.println("equal true");
             return true;
         }
-        errorThrowOut(str);
+        //为了不让程序重复报错，加个判定（反正已经出错了继续往下分析也全错）
+        if(!ifThrowOut) {
+            errorThrowOut(str);
+            ifThrowOut = true;
+        }
+        else{
+            Parser.p.minus();
+        }
         return false;
     }
 

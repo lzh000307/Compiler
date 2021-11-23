@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Scanner {
+    public static final int ERROR = -1;
     private static Word word = new Word();
     public static List<Word> words = new ArrayList<Word>();
     private static int line = 1;
@@ -118,7 +119,12 @@ public class Scanner {
                         break;
                     }
                     ch = back();
-                    Parser.errorNotification("!=", line);
+                    //ERROR Throw out
+                    word.set(ERROR,"!");
+                    word.setLine(line, lineStartPosition);
+                    word.setPosition(startLoc);
+                    word.check("NOTIFICATION");
+                    //Parser.errorNotification("!=", line);
                     break;
                 case '\0':
                     word.set("\\0");
@@ -126,12 +132,16 @@ public class Scanner {
                     return;
                 default:
                     //TODO ERROR
-                    Parser.errorNotification(Character.toString(ch), line);
+                    word.set(ERROR,Character.toString(ch));
+                    word.setLine(line, lineStartPosition);
+                    word.setPosition(startLoc);
+                    word.check("NOTIFICATION");
+                    //Parser.errorNotification(Character.toString(ch), line);
 
             }
         }
         //startLoc = endLoc++;
-        if(word.getTypeNumber()!=0) {
+        if(word.getTypeNumber()!=-1) {
             word.setLine(line, lineStartPosition);
             word.setPosition(startLoc);
             words.add(word);
