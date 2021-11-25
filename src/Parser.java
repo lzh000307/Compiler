@@ -12,13 +12,11 @@ public class Parser {
     public static int nSuffix = 0, nNXQ = 0, ntc = 1, nfc = 1;
     public static int nChain = 1;
     public static List<Word> words = Scanner.words;
-    //public static int p.get()=0;
     public static Pointer p;
     /**
      * 匹配开头
      */
     public static void parse() {
-        //int nChain = 1 /* new int[1]= {1} */;
         p = new Pointer(0,words.size());
         words.get(p.getpp()).check("int");
         words.get(p.getpp()).check("main");
@@ -32,8 +30,6 @@ public class Parser {
      * TODO Rewrite
      */
     public static void printQuaternion() {
-        //int nLoop;
-        //for (nLoop = 1; nLoop < nNXQ; nLoop++) {
         for (int loop = 0; loop < pQuad.size(); loop++) {
             System.out.println(loop + 1 + ":" + pQuad.get(loop));
         }
@@ -74,7 +70,6 @@ public class Parser {
             } else {
                 w = 0;
             }
-            //w = Integer.parseInt(pQuad.get(q).result);
             //语句行数从1开始，因此要+1
             pQuad.get(q).setResult(t+1+"");
             q = w;
@@ -96,7 +91,7 @@ public class Parser {
      */
     public static void statement() {
         String result, var1;
-        int temp = 1;   /*new int[1]/*{1}*/
+        int temp = 1;
         int nWQUAD;
         switch (words.get(p.get()).getTypeNumber()) {
             case VARIABLE:
@@ -129,7 +124,7 @@ public class Parser {
                 nWQUAD = nNXQ;
                 words.get(p.getpp()).check("(");
                 condition();
-                int tmp = nfc;//这里加这句，是因为while里有if时，while里的nfc会被覆盖，那么下方nChain[0] = nfcInt;就得到错误的nChain[0]
+                int tmp = nfc;          //while里有if时
                 bp(ntc, nNXQ);
                 words.get(p.getpp()).check(")");
                 nChain = temp;

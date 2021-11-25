@@ -1,5 +1,5 @@
-main(){
-    area=3*(4+2);
+int main(){
+    abb=3*(4+2);
     while(A>C){
         if(A<=1){
             C=C-1;

@@ -41,7 +41,7 @@ public class Scanner {
                 if(ch == '.' && !point){
                     point = true;
                     ch = str.charAt(endLoc++);
-                    if(!Utils.isDigit(ch)){     //not a number after point
+                    if(!Utils.isDigit(ch)){     //not a number after pointer
                         ch = back();
                     }
                 }
@@ -81,7 +81,6 @@ public class Scanner {
                             }
                         }
                     }
-                    //TODO Error
                     ch = back();
                     word.set("/");
                     break;
@@ -150,7 +149,7 @@ public class Scanner {
     }
 
     /**
-     * read next character
+     * read next character NOT INCLUDE '\n' & ' '
      * @return
      */
     public static char next(){
