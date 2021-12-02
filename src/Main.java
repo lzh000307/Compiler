@@ -1,7 +1,7 @@
 import java.io.File;
 import java.util.*;
 public class Main {
-    private static String str = new String();
+    private static String str;
     public static String getStr(){
         return str;
     }
@@ -16,14 +16,17 @@ public class Main {
         while(Scanner.endLoc < str.length()-1){
             Scanner.scanner();
         }
-        /*
+        System.out.println("词法分析结果：");
         System.out.println("***************************");
+        int i=0;
         for(Word word : Scanner.words) {
-
-            System.out.println(word);
+            i++;
+            if(i%10==0)
+                System.out.println();
+            System.out.print(word + ", ");
         }
-
-         */
+        System.out.println();
+        System.out.println("***************************");
         Parser.parse();
     }
 
